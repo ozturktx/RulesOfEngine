@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.poi.ss.usermodel.*;
 import org.testng.Assert;
 
@@ -25,31 +26,6 @@ public class ExcelUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public String getCellData(int rowNum, int colNum) {
-        Cell cell;
-        try {
-            cell = workSheet.getRow(rowNum).getCell(colNum);
-            String cellData = cell.toString();
-            return cellData;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public String[][] getDataArray() {
-
-        String[][] data = new String[rowCount()][columnCount()];
-
-        for (int i = 0; i < rowCount(); i++) {
-            for (int j = 0; j < columnCount(); j++) {
-                String value = getCellData(i, j);
-                data[i][j] = value;
-            }
-        }
-        return data;
-
     }
 
     public List<Map<String, String>> getDataList() {
@@ -82,38 +58,6 @@ public class ExcelUtils {
             columns.add(cell.toString());
         }
         return columns;
-    }
-
-    public void setCellData(String value, int rowNum, int colNum) {
-        Cell cell;
-        Row row;
-
-        try {
-            row = workSheet.getRow(rowNum);
-            cell = row.getCell(colNum);
-
-            if (cell == null) {
-                cell = row.createCell(colNum);
-                cell.setCellValue(value);
-            } else {
-                cell.setCellValue(value);
-            }
-            FileOutputStream fileOut = new FileOutputStream(path);
-            workBook.write(fileOut);
-
-            fileOut.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setCellData(String value, String columnName, int row) {
-        int column = getColumnsNames().indexOf(columnName);
-        setCellData(value, row, column);
-    }
-
-    public int columnCount() {
-        return workSheet.getRow(0).getLastCellNum();
     }
 
     public int rowCount() {
